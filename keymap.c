@@ -1,8 +1,31 @@
 #include QMK_KEYBOARD_H
 
+// TAP DANCE
+enum {
+    TD_GUI_CTRL = 0
+};
+
+void td_gui_ctrl_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        register_code(KC_LGUI);
+    } else {
+        register_code(KC_LCTL);
+    }
+}
+
+void td_gui_ctrl_reset(tap_dance_state_t *state, void *user_data) {
+    unregister_code(KC_LGUI);
+    unregister_code(KC_LCTL);
+}
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_GUI_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_gui_ctrl_finished, td_gui_ctrl_reset)
+};
+
 // ALIASES
 #define E_LSA_TAB LSA_T(KC_TAB)
 #define E_LT4_ESC LT(4, KC_ESC)
+#define E_LT4_ENT LT(4, KC_ENT)
 #define E_C_COL LCTL_T(KC_SCLN)
 #define E_S_QUO LSFT_T(KC_QUOT)
 #define E_GUI1 LGUI(KC_1)
@@ -11,6 +34,7 @@
 #define E_GUI4 LGUI(KC_4)
 #define E_A_SPC LALT(KC_SPACE)
 #define E_GUI_V LGUI(KC_V)
+#define E_TD_GC TD(TD_GUI_CTRL)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3_ex2(
@@ -21,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
         KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                            KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, E_S_QUO,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            KC_LGUI,   MO(1),  KC_SPC,     KC_SPC,   MO(2), KC_LGUI
+                                            E_TD_GC,   MO(1),  KC_SPC,  E_LT4_ENT,   MO(2), KC_LALT
                                         //`--------------------------'  `--------------------------'
   ),
   [1] = LAYOUT_split_3x6_3_ex2(
@@ -32,7 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
         KC_LSFT,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            KC_LGUI, KC_TRNS,  KC_SPC,     KC_SPC,   MO(3), KC_LGUI
+                                            E_TD_GC, KC_TRNS,  KC_SPC,  E_LT4_ENT,   MO(3), KC_LALT
                                         //`--------------------------'  `--------------------------'
   ),
   [2] = LAYOUT_split_3x6_3_ex2(
@@ -43,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
         KC_LSFT,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            KC_LGUI,   MO(3),  KC_SPC,     KC_SPC, KC_TRNS, KC_LGUI
+                                            E_TD_GC,   MO(3),  KC_SPC,  E_LT4_ENT, KC_TRNS, KC_LALT
                                         //`--------------------------'  `--------------------------'
   ),
   [3] = LAYOUT_split_3x6_3_ex2(
@@ -54,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            KC_LGUI, KC_TRNS,  KC_SPC,     KC_SPC, KC_TRNS, KC_LGUI
+                                            E_TD_GC, KC_TRNS,  KC_SPC,  E_LT4_ENT, KC_TRNS, KC_LALT
                                         //`--------------------------'  `--------------------------'
   ),
   [4] = LAYOUT_split_3x6_3_ex2(
@@ -65,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                           KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
     //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                            KC_LGUI,   KC_NO,   KC_NO,     KC_NO,   KC_NO, KC_LGUI
+                                            E_TD_GC,   KC_NO,   KC_NO,     KC_NO,   KC_NO, KC_LALT
                                         //`--------------------------'  `--------------------------'
   )
 };
